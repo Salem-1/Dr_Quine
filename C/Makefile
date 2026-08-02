@@ -1,8 +1,8 @@
 NAME = Colleen
 SRC = Colleen.c
 OBJ = $(SRC:.c=.o)
-CC= gcc
-# CFLAGS = -wall -wextra -werror
+CC= clang
+CFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
