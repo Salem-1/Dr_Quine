@@ -1,0 +1,40 @@
+#!/bin/bash
+# Transparent gdb shim for this emulated amd64 container.
+# Native ptrace can't reach x86 registers here (ARM64 kernel underneath), so:
+# run the binary under qemu-x86_64's gdb stub and connect gdb to it.
+# Usage is unchanged, e.g.:  gdb ./a.out -q -x gdbcfg
+# `start`/`run` lines in a -x config are rewritten for the remote stub and
+# their arguments become the program's argv. Set REAL_GDB_NATIVE=1 to bypass.
+REAL=/usr/bin/gdb
+[[ -n $REAL_GDB_NATIVE ]] && exec "$REAL" "$@"
+
+BIN="" CFG="" PASS=() PROGARGS=()
+while (($#)); do
+	case "$1" in
+		-x) CFG=$2; shift 2 ;;
+		-ex|-iex|-d|--eval-command|--init-eval-command) PASS+=("$1" "$2"); shift 2 ;;
+		--args) shift; BIN=$1; shift; PROGARGS=("$@"); break ;;
+		-*) PASS+=("$1"); shift ;;
+		*) if [[ -z $BIN ]]; then BIN=$1; else PROGARGS+=("$1"); fi; shift ;;
+	esac
+done
+
+# no binary to run -> plain gdb
+[[ -z $BIN ]] && exec "$REAL" "${PASS[@]}" ${CFG:+-x "$CFG"}
+
+TMPCFG=""
+if [[ -n $CFG ]]; then
+	# program args come from the cfg's start/run line unless given on the cmdline
+	if [[ ${#PROGARGS[@]} -eq 0 ]]; then
+		read -r -a PROGARGS <<< "$(sed -nE 's/^[[:space:]]*(start|run)[[:space:]]+//p' "$CFG" | head -1)"
+	fi
+	# remote stubs have no start/run: the program is already live at entry
+	TMPCFG=$(mktemp /tmp/gdbcfg.XXXXXX)
+	sed -E 's/^[[:space:]]*start([[:space:]].*)?$/tbreak main\ncontinue/
+	        s/^[[:space:]]*run([[:space:]].*)?$/continue/' "$CFG" > "$TMPCFG"
+fi
+
+PORT=$((1024 + RANDOM % 30000))
+qemu-x86_64 -g "$PORT" "$BIN" "${PROGARGS[@]}" &
+sleep 1
+exec "$REAL" "${PASS[@]}" "$BIN" -ex "target remote localhost:$PORT" ${TMPCFG:+-x "$TMPCFG"}
