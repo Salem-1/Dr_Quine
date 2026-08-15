@@ -11,7 +11,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 
-run: all 
+run: repru 
 	./Grace
 
 debug:
@@ -23,6 +23,10 @@ clean:
 fclean: clean
 	rm -f $(NAME) 
 
+prune: fclean
+	rm -rf Grace_kid.c
+
 re: fclean all
 
+repru: prune re
 .PHONY: all clean fclean re
