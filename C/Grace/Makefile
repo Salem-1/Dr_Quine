@@ -29,4 +29,5 @@ prune: fclean
 re: fclean all
 
 repru: prune re
-.PHONY: all clean fclean re
+
+.PHONY: all clean fclean re prune repru

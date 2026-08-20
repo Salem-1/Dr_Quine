@@ -20,5 +20,6 @@ FT(PAYLOAD);
 
 /*
 	Remeber those ascii you will need them
-	\n 0xa, \ 0x5c, " 0x22
+	
+ 0xa, \ 0x5c, " 0x22
 */

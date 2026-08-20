@@ -10,7 +10,7 @@ with open("Grace.s", "r", encoding="utf-8") as f:
 	for i in buff:
 		#removing commented lines
 		if "; Bism Ellah Elrahman Elraheem%cextern fopen" in i:
-			cs = i.count("%c")
+			cs = i.count("%c") + i.count("%s")
 		elif ";" in i or "macro" in i:
 			continue
 		elif "push" in i:
