@@ -1,0 +1,69 @@
+; Bism Ellah Elrahman Elraheem
+extern fopen, fprintf, fclose
+global main
+default rel
+
+%macro DELIVERY 0
+	lea rdi, [child]
+	lea rsi, [mode]
+	call fopen wrt ..plt
+	test rax, rax
+	jz end_program
+	mov rdi, rax
+	mov [opened_file], rdi
+	lea rsi, msg
+	mov rdx, 0xa
+	mov rcx, 0xa
+	mov r8, 0xa
+	mov r9, 0xa
+	sub rsp, 0x2e8
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	push 0x7e
+	mov rax, msg
+	push rax
+	push 0x22
+	PUSH_NEWLINE 2
+	push 0x22
+	push 0x22
+	push 0xa
+	push 0x22
+	push 0x22
+	push 0xa
+	push 0x25
+	PUSH_NEWLINE 2
+	push 0x25
+	PUSH_NEWLINE 57
+	push 0x25
+	push 0xa
+	xor rax, rax
+	call fprintf wrt ..plt
+	mov rdi, [opened_file]
+	call fclose wrt ..plt
+	add rsp, 0x5d0
+	xor rax, rax
+end_program:
+	ret
+%endmacro
+
+%macro VARS 0
+	child db "Grace_kid.s", 0
+	mode db "w", 0
+	opened_file dq 0 
