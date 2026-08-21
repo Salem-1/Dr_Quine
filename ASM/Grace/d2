@@ -38,3 +38,8 @@ default rel
 	push 0xa
 	push 0x22
 	mov rax, msg
+	push rax
+	push 0x22
+	PUSH_NEWLINE 2
+	push 0x22
+	push 0x22
