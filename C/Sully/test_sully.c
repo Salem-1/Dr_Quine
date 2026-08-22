@@ -2,10 +2,14 @@
 
 make wipe
 make run
+
+cd Sully_children
 for i in {-1..4}
 do
 	echo diffing $i
-	diff Sully_children/Sully_$i.c Sully.c
+	diff Sully_$i.c ../Sully.c
 	echo ===========================================================
 	echo ===========================================================
 done
+
+ls -la | grep Sully | wc -l

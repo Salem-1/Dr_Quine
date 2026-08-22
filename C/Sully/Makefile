@@ -4,7 +4,7 @@ SRC = Sully.c
 CC= clang
 CFLAGS = -Wall -Wextra -Werror
 
-OBJ = $(SRC:%.c=$(DIR)/%.o)
+OBJ = $(SRC:%.c=%.o)
 
 all: $(NAME)
 
@@ -14,7 +14,7 @@ $(DIR):
 $(DIR)/%.o: %.c | $(DIR) # the | $(DIR) ensure the output directory exists first
 	$(CC) $(CFLAGS) -c $< -o $@  #the first dependancy "Sully.c"; $@ the target "Sully.o"
 
-$(NAME): $(OBJ)
+$(NAME): $(DIR) $(OBJ)
 	$(CC) $(OBJ) -o  $@   
 
 run: all 
