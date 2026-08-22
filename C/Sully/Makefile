@@ -1,22 +1,24 @@
-NAME = Sully
 DIR =  Sully_children
+NAME = $(DIR)/Sully
 SRC = Sully.c
-OBJ = $(SRC:.c=.o)
 CC= clang
 CFLAGS = -Wall -Wextra -Werror
 
-target:
-	$(MAKE) -C ./$(DIR)
-	
+OBJ = $(SRC:%.c=$(DIR)/%.o)
+
 all: $(NAME)
 
-%.o: %.s 
-	$(CC) $(SRC) -o $(NAME)
+$(DIR): 
+	mkdir -p $(DIR)
+
+$(DIR)/%.o: %.c | $(DIR) # the | $(DIR) ensure the output directory exists first
+	$(CC) $(CFLAGS) -c $< -o $@  #the first dependancy "Sully.c"; $@ the target "Sully.o"
 
 $(NAME): $(OBJ)
+	$(CC) $(OBJ) -o  $@   
 
-run: wipe all 
-	./Sully
+run: all 
+	cd $(DIR) && ./Sully
 
 clean:
 	rm -f $(OBJ)
@@ -28,7 +30,7 @@ fclean: clean
 re: fclean all
 
 wipe: fclean 
-	rm -rf Sully_*
+	rm -rf $(DIR)
 
 
 .PHONY: all clean fclean re wipe rewi
