@@ -1,47 +1,27 @@
+int i = 5;
 #include <fcntl.h>
 #include <stdio.h>
 #include<string.h>
 #include <stdlib.h>
-#include <stdio.h>
+
 #define S(x) #x
-
-# define CRAZY_PARSER(check_me) ( \
-	(check_me) == 5 ? 53 :   strlen(__FILE__) != 9 ?  1 : strncmp(__FILE__, S(Sully_), 6) != 0 ? 2 : strcmp(&__FILE__[7], S(.c)) != 0 ? 3 :  __FILE__[6] > 48 && __FILE__[6] < 54 ? __FILE__[6]  : 4)
-
-#define WRITE_ME_BRO(target_file, payload, ...) fprintf(target_file, payload __VA_OPT__(,) __VA_ARGS__)
+#define FIRST_NLs(C)  C, 0xa, 0xa, 0xa,  0xa, 0xa,  0xa , 0xa, 0xa, 0xa, 0xa, 0xa, 0xa,  0xa, 0xa,  0xa , 0xa, 0xa, 0xa, 0xa
+#define	LAST_F_CHAR_ARGS 0x22, 0xa, 0xa, 0xa, 0x25, 0x25, 0x25, 0xa, 0xa, 0xa, 0xa
+# define TINY_PARSER(check_me) ((check_me) == 5 ? 53 :  __FILE__[6] > 47 && __FILE__[6] < 54 ? __FILE__[6]  : 4)
 
 int main(){
-	int turn_off_counter = 5;
-	char char_counter = (char)CRAZY_PARSER(turn_off_counter);
-	if (--char_counter < 48)
+	char file_counter = TINY_PARSER(i);
+	if (--file_counter < 47)
 		return (0);
-	char fname[] = S(Sully_X.c);
-	fname[6] = char_counter;
-	FILE *sully_x = fopen(fname, S(w));
+	char fname[] = S(Sully_X.cl);
+	if (file_counter == 47) {strcpy(fname, S(Sully_-1.c));} else {fname[6] = file_counter; fname[9] = 0;}
+	FILE *sully_x = fopen(fname, S(w));char str_file_counter[] = S(XX); if (file_counter == 47) {strcpy(str_file_counter, S(-1));} else {str_file_counter[0] = file_counter; str_file_counter[1] = 0;}
 	if (sully_x == NULL)
 		return (1);
-
-	char *file_content = "#include <fcntl.h>%c#include <stdio.h>%c#include<string.h>%c#include <stdlib.h>%c#include <stdio.h>%c#define S(x) #x%c# define CRAZY_PARSER(check_me) ( (check_me) == 5 ? 53 :   strlen(__FILE__) != 9 ?  1 : strncmp(__FILE__, S(Sully_), 6) != 0 ? 2 : strcmp(&__FILE__[7], S(.c)) != 0 ? 3 :  __FILE__[6] > 48 && __FILE__[6] < 54 ? __FILE__[6]  : 4)%c#define WRITE_ME_BRO(target_file, payload, ...) fprintf(target_file, payload __VA_OPT__(,) __VA_ARGS__)%cint main(){%c	int turn_off_counter = %d;%c	char char_counter = (char)CRAZY_PARSER(turn_off_counter);if (--char_counter < 48)return (0);char fname[] = S(Sully_X.c);fname[6] = char_counter;FILE *sully_x = fopen(fname, S(w));if (sully_x == NULL)return (1);%c	char *file_content = %c%s%c;%c	WRITE_ME_BRO(sully_x, file_content,  0xa, 0xa, 0xa,  0xa, 0xa,  0xa , 0xa, 0xa,  0xa, char_counter,0xa, 0xa, 0x22, file_content, 0x22, 0xa, 0xa, 0xa);%c	fclose(sully_x);char command[60];sprintf(command, S(gcc -Wall -Wextra -Werror %cs -o Sully && ./Sully), fname);system(command);return 0;}";
-	WRITE_ME_BRO(sully_x, file_content,  0xa, 0xa, 0xa,  0xa, 0xa,  0xa , 0xa, 0xa,  0xa, char_counter,0xa, 0xa, 0x22, file_content, 0x22, 0xa, 0xa, 0x25, 0xa);
-	fclose(sully_x);char command[60];
-	sprintf(command, S(clang -Wall -Wextra -Werror %s -o Sully && ./Sully), fname);
+	char *file_content = "	int i = %s;%c#include <fcntl.h>%c#include <stdio.h>%c#include<string.h>%c#include <stdlib.h>%c%c#define S(x) #x%c#define FIRST_NLs(C)  C, 0xa, 0xa, 0xa,  0xa, 0xa,  0xa , 0xa, 0xa, 0xa, 0xa, 0xa, 0xa,  0xa, 0xa,  0xa , 0xa, 0xa, 0xa, 0xa%c#define	LAST_F_CHAR_ARGS 0x22, 0xa, 0xa, 0xa, 0x25, 0x25, 0x25, 0xa, 0xa, 0xa, 0xa%c# define TINY_PARSER(check_me) ((check_me) == 5 ? 53 :  __FILE__[6] > 47 && __FILE__[6] < 54 ? __FILE__[6]  : 4)%cint main(){%c	char file_counter = TINY_PARSER(i);%c	if (--file_counter < 47)%c		return (0);%c	char fname[] = S(Sully_X.cl);%c	if (file_counter == 47) {strcpy(fname, S(Sully_-1.c));} else {fname[6] = file_counter; fname[9] = 0;}%c	FILE *sully_x = fopen(fname, S(w));char str_file_counter[] = S(XX); if (file_counter == 47) {strcpy(str_file_counter, S(-1));} else {str_file_counter[0] = file_counter; str_file_counter[1] = 0;}%c	if (sully_x == NULL)%c		return (1);%c	char *file_content = %c%s%c;%c	fprintf(sully_x, file_content,  FIRST_NLs(str_file_counter), 0x22, file_content,LAST_F_CHAR_ARGS);%c	fclose(sully_x);char command[90];%c	sprintf(command, S(clang -Wall -Wextra -Werror %cs -o Sully_%cs && ./Sully_%cs), fname, str_file_counter, str_file_counter);%c	system(command);%c	return 0;%c}";
+	fprintf(sully_x, file_content,  FIRST_NLs(str_file_counter), 0x22, file_content,LAST_F_CHAR_ARGS);
+	fclose(sully_x);char command[90];
+	sprintf(command, S(clang -Wall -Wextra -Werror %s -o Sully_%s && ./Sully_%s), fname, str_file_counter, str_file_counter);
 	system(command);
 	return 0;
 }
-
-// char crazy_parser(int turn_off_counter)
-// {
-// 	if (turn_off_counter == 5)
-// 		return (0);
-// 	else if (strlen(__FILE__) != 9)
-// 		return (1);
-// 	else if (strncmp(__FILE__, S(Sully_), 6) != 0)
-// 		return  (2);
-// 	else if (strcmp(&__FILE__[7], S(.c)) != 0)
-// 		return (3);
-// 	else if  (__FILE__[6] > 48 && __FILE__[6] < 54)
-// 		return (__FILE__[6]);
-// 	else
-// 		return (4);
-
-// }

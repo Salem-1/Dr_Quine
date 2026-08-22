@@ -1,9 +1,13 @@
 NAME = Sully
+DIR =  Sully_children
 SRC = Sully.c
 OBJ = $(SRC:.c=.o)
 CC= clang
 CFLAGS = -Wall -Wextra -Werror
 
+target:
+	$(MAKE) -C ./$(DIR)
+	
 all: $(NAME)
 
 %.o: %.s 
@@ -11,7 +15,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 
-run: all 
+run: wipe all 
 	./Sully
 
 clean:
@@ -23,4 +27,8 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+wipe: fclean 
+	rm -rf Sully_*
+
+
+.PHONY: all clean fclean re wipe rewi
