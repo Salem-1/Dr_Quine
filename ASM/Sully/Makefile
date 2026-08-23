@@ -5,7 +5,7 @@ SRC =  Sully.s
 OBJ = $(DIR)/$(SRC:.s=.o)
 
 ASM = nasm
-ASMFLAGS = -f elf64 
+ASMFLAGS = -f elf64 -Wall 
 NAME = $(DIR)/Sully
 CC = gcc
 
