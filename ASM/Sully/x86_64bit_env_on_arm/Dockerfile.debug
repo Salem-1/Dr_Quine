@@ -1,0 +1,21 @@
+# Native arm64 debugger container: gdb-multiarch talks to qemu's gdb stub,
+# which runs the x86-64 binary and serves its guest registers directly.
+# arm64v8/ = explicit arm64 image; plain ubuntu:24.04 would reuse the amd64
+# copy already cached for the asm service (classic builder ignores --platform)
+FROM arm64v8/ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# default sources are arm64-only (ports.ubuntu.com); add amd64 archive so we
+# can install the x86-64 libc the tested binary needs under qemu-x86_64
+RUN sed -i 's/^Components:/Architectures: arm64\nComponents:/' /etc/apt/sources.list.d/ubuntu.sources \
+ && dpkg --add-architecture amd64 \
+ && printf 'Types: deb\nURIs: http://archive.ubuntu.com/ubuntu/\nSuites: noble noble-updates noble-security\nComponents: main universe restricted multiverse\nArchitectures: amd64\nSigned-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg\n' \
+    > /etc/apt/sources.list.d/amd64.sources \
+ && apt update && apt install -y --no-install-recommends \
+    gdb-multiarch qemu-user libc6:amd64 ncurses-bin \
+ && rm -rf /var/lib/apt/lists/*
+
+ENV TERM=xterm-256color
+
+WORKDIR /app

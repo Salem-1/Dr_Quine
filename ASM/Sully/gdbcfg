@@ -1,0 +1,40 @@
+set disassembly-flavor intel
+
+# Custom 4-pane layout: registers (top), C source, assembly, then status + command
+#tui new-layout dev src 2 asm 2 regs 1 status 1 cmd 1
+#layout dev
+
+
+
+tui new-layout dev asm 2 regs 1 status 1 cmd 1
+#layout dev
+#set tui mouse-events off
+
+
+# Stack view (no TUI window type for this, so it prints below)
+#display/20gx $rsp
+
+display/15i $rip
+display/x $rbp
+display/x $rsp
+display/x $rax
+display/x $rbx
+display/x $rcx
+display/x $rdx
+display/x $rdi
+display/x $rsi
+display/x $r8
+display/x $r9
+display/x $r10
+display/x $r11
+display/x $r12
+display/x $r13
+display/x $r14
+display/x $r15
+display/20gx $rsp
+display/t $eflags 
+
+
+
+b main
+start 
