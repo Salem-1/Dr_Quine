@@ -29,7 +29,7 @@ fclean: clean
 	rm -f $(NAME)
 
 prune: fclean
-	rm -rf Grace_kid.c
+	rm -rf Grace_kid.s
 
 re: fclean all
 

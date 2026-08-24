@@ -11,11 +11,11 @@ all: $(NAME)
 $(DIR): 
 	mkdir -p $(DIR)
 
-$(DIR)/%.o: %.c | $(DIR) # the | $(DIR) ensure the output directory exists first
-	$(CC) $(CFLAGS) -c $< -o $@  #the first dependancy "Sully.c"; $@ the target "Sully.o"
-
 $(NAME): $(DIR) $(OBJ)
 	$(CC) $(OBJ) -o  $@   
+
+$(DIR)/%.o: %.c | $(DIR) # the | $(DIR) ensure the output directory exists first
+	$(CC) $(CFLAGS) -c $< -o $@  #the first dependancy "Sully.c"; $@ the target "Sully.o"
 
 run: all 
 	cd $(DIR) && ./Sully
