@@ -1,0 +1,37 @@
+# Fixed project + image names: every project that carries a copy of this
+# directory shares the same two images -> build once, reuse everywhere.
+name: x86_64_env
+
+services:
+  asm:
+    platform: linux/amd64           # <- crucial on Apple Silicon
+    image: x86_64_env/asm
+    build:
+      context: .
+    working_dir: /app
+    volumes:
+      - ..:/app:delegated           # the project this dir sits in -> /app
+      - ./gdbcfg:/gdbcfg.default:ro # bundled gdb config, dir-rename-proof
+    tty: true
+    stdin_open: true
+    init: true
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+
+  # debugger sidecar: native arm64 gdb-multiarch + qemu-x86_64 gdb stub
+  # (ptrace-based gdb cannot work inside the emulated amd64 container)
+  dbg:
+    platform: linux/arm64
+    image: x86_64_env/dbg
+    build:
+      context: .
+      dockerfile: Dockerfile.debug
+    working_dir: /app
+    volumes:
+      - ..:/app:delegated
+      - ./gdbcfg:/gdbcfg.default:ro
+    tty: true
+    stdin_open: true
+    init: true
