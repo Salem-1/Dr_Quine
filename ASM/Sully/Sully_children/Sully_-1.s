@@ -1,4 +1,4 @@
-; int i = 5
+; int i = -1Sully_0.s
 ; Bism Ellah Elrahman Elraheem
 extern fopen, fprintf, fclose, sprintf, system
 global main

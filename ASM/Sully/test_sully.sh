@@ -7,6 +7,7 @@ cd Sully_children
 for i in {-1..4}
 do
 	echo diffing $i
+	echo
 	diff Sully_$i.s ../Sully.s
 	echo ===========================================================
 	echo ===========================================================

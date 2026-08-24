@@ -28,8 +28,8 @@ with open("Sully.s", "r", encoding="utf-8") as f:
 			final_file_out += i + "\n"
 
 with open("Sully.s", "w", encoding="utf-8") as f:
-	final_file_out = final_file_out.replace("i db 0x%5$c%1$c", "i db 0x%5$c%1$c")
-	final_file_out = final_file_out.replace("; int i = 5%1$c;", "; int i = %5$c%1$c;")
+	# final_file_out = final_file_out.replace("i db 5%1$c", "i db %5$s%1$c")
+	final_file_out = final_file_out.replace("; int i = 5%1$c;", "; int i = %5$s%1$c;")
 	f.write(final_file_out)
 
 print(final_file_out, end="")
